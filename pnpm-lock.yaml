@@ -152,14 +152,7 @@ overrides:
 
 importers:
 
-  .:
-    devDependencies:
-      prettier:
-        specifier: ^3.8.1
-        version: 3.8.1
-      typescript:
-        specifier: ~5.9.2
-        version: 5.9.3
+  .: {}
 
   artifacts/api-server:
     dependencies:
@@ -336,7 +329,7 @@ importers:
         specifier: ^15.8.1
         version: 15.8.1
       react:
-        specifier: ^18.2.0
+        specifier: 18.3.1
         version: 18.3.1
       react-content-loader:
         specifier: ^7.0.0
@@ -345,7 +338,7 @@ importers:
         specifier: ^0.3.8
         version: 0.3.8(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-dom:
-        specifier: ^18.2.0
+        specifier: 18.3.1
         version: 18.3.1(react@18.3.1)
       react-joyride:
         specifier: ^2.8.2
