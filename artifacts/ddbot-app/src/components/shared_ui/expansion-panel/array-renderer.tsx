@@ -1,6 +1,5 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Icon } from '@/utils/tmp/dummy';
 import { TItem } from '../types/common.types';
 
 type TArrayRenderer = {
@@ -19,38 +18,54 @@ const ArrayRenderer = ({ array, open_ids, setOpenIds }: TArrayRenderer) => {
     };
 
     return (
-        <React.Fragment>
+        <>
             {array.map((item, index) => {
-                if (Array.isArray(item?.value)) {
+                const isArray = Array.isArray(item?.value);
+
+                if (isArray) {
                     return (
-                        <div key={index} className='dc-expansion-panel__content-array'>
+                        <div key={item.id || index} className="dc-expansion-panel__content-array">
                             <div
                                 className={classNames('dc-expansion-panel__content-array', {
                                     'dc-expansion-panel__content-active': open_ids.includes(item.id),
                                 })}
                             >
-                                <span className='dc-expansion-panel__content-array-item-index'>{`${index + 1}: `}</span>
-                                ({`${item.value.length}`})
-                                <Icon
-                                    className='dc-expansion-panel__content-chevron-icon'
-                                    icon='IcChevronRight'
+                                <span className="dc-expansion-panel__content-array-item-index">
+                                    {`${index + 1}: `}
+                                </span>
+
+                                {`(${item.value.length})`}
+
+                                <span
+                                    className="dc-expansion-panel__content-chevron-icon"
                                     onClick={() => onArrayItemClick(item.id)}
-                                />
+                                    style={{ cursor: 'pointer', marginLeft: 8 }}
+                                >
+                                    ▶
+                                </span>
                             </div>
-                            {open_ids.includes(item.id) ? (
-                                <ArrayRenderer array={item.value} open_ids={open_ids} setOpenIds={setOpenIds} />
-                            ) : null}
+
+                            {open_ids.includes(item.id) && (
+                                <ArrayRenderer
+                                    array={item.value as Array<TItem>}
+                                    open_ids={open_ids}
+                                    setOpenIds={setOpenIds}
+                                />
+                            )}
                         </div>
                     );
                 }
+
                 return (
-                    <div key={index} className='dc-expansion-panel__content-array'>
-                        <span className='dc-expansion-panel__content-array-item-index'>{`${index + 1}: `}</span>
+                    <div key={item.id || index} className="dc-expansion-panel__content-array">
+                        <span className="dc-expansion-panel__content-array-item-index">
+                            {`${index + 1}: `}
+                        </span>
                         {item?.value?.toString()}
                     </div>
                 );
             })}
-        </React.Fragment>
+        </>
     );
 };
 

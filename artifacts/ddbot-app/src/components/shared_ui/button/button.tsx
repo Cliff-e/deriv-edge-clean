@@ -1,10 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 
-import { Icon } from '@/utils/tmp/dummy';
-
 import Text from '../text';
-
 import ButtonLoading from './button_loading';
 
 export type TButtonCommonProps = {
@@ -31,7 +28,10 @@ export type TButtonCommonProps = {
     text: string;
     transparent: boolean;
 };
-export type TButtonProps = React.PropsWithChildren<React.ButtonHTMLAttributes<HTMLButtonElement>> &
+
+export type TButtonProps = React.PropsWithChildren<
+    React.ButtonHTMLAttributes<HTMLButtonElement>
+> &
     TButtonCommonProps & {
         classNameSpan: string;
         icon: React.ReactNode;
@@ -48,6 +48,7 @@ export type TButtonGroupProps = {
 const ButtonGroup = ({ children, className }: TButtonGroupProps) => (
     <div className={classNames('dc-btn__group', className)}>{children}</div>
 );
+
 const Button = ({
     black,
     blue,
@@ -109,6 +110,7 @@ const Button = ({
         },
         className
     );
+
     const button = (
         <button
             id={id}
@@ -119,24 +121,55 @@ const Button = ({
             type={is_submit_success ? 'button' : type || 'submit'}
             {...props}
         >
-            {icon && <div className={classNames('dc-btn__icon', { 'dc-btn__icon--circle': is_circle })}>{icon}</div>}
+            {/* Custom icon passed from parent */}
+            {icon && (
+                <div className={classNames('dc-btn__icon', { 'dc-btn__icon--circle': is_circle })}>
+                    {icon}
+                </div>
+            )}
+
+            {/* Text */}
             {text &&
                 !(is_loading || is_submit_success) &&
-                ((typeof renderText === 'function' && renderText(text[0].toUpperCase() + text.substr(1))) || (
-                    <Text size='xs' weight='bold' align='center' className={classNames('dc-btn__text', classNameSpan)}>
-                        {text[0].toUpperCase() + text.substr(1)}
+                ((typeof renderText === 'function' &&
+                    renderText(text[0].toUpperCase() + text.slice(1))) || (
+                    <Text
+                        size="xs"
+                        weight="bold"
+                        align="center"
+                        className={classNames('dc-btn__text', classNameSpan)}
+                    >
+                        {text[0].toUpperCase() + text.slice(1)}
                     </Text>
                 ))}
+
+            {/* Loading */}
             {is_loading && <ButtonLoading />}
-            {is_submit_success && <Icon icon='IcCheckmark' color='active' size={24} />}
-            {is_plus && <Icon icon='IcAddBold' color='black' size={18} />}
+
+            {/* Success state */}
+            {is_submit_success && (
+                <span className="dc-btn__icon dc-btn__icon--check">✓</span>
+            )}
+
+            {/* Plus state */}
+            {is_plus && (
+                <span className="dc-btn__icon dc-btn__icon--plus">+</span>
+            )}
+
+            {/* Children fallback */}
             {!text && !is_loading && children && (
-                <Text size='xs' weight='bold' align='center' className={classNames('dc-btn__text', classNameSpan)}>
+                <Text
+                    size="xs"
+                    weight="bold"
+                    align="center"
+                    className={classNames('dc-btn__text', classNameSpan)}
+                >
                     {children}
                 </Text>
             )}
         </button>
     );
+
     const wrapper = <div className={wrapperClassName}>{button}</div>;
 
     return wrapperClassName ? wrapper : button;
